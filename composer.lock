@@ -1,0 +1,68 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "534dd23c5cadb61c6e20ec8208c28480",
+    "content-hash": "2699e848462b966007f0d59e9172e3f7",
+    "packages": [
+        {
+            "name": "mtoolkit/mtoolkit-core",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "../mtoolkit-core/",
+                "reference": "3aaa4c43445eec724f756296be069dfb39e87ed8"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mtoolkit\\core\\": "./src/"
+                }
+            },
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Michele Pagnin",
+                    "email": "pagnin.michele@gmail.com",
+                    "homepage": "http://mpmp.altervista.org",
+                    "role": "Main Developer"
+                }
+            ],
+            "description": "The core of the PHP framework to write less and do more",
+            "homepage": "http://mpstyle.github.io/MToolkit/",
+            "keywords": [
+                ".NET",
+                "Qt",
+                "fast",
+                "framework",
+                "free",
+                "library",
+                "php",
+                "simple",
+                "toolkit",
+                "web framework"
+            ],
+            "support": {
+                "email": "pagnin.michele@gmail.com"
+            },
+            "time": "2016-01-16 18:08:05"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "mtoolkit/mtoolkit-core": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
