@@ -4,7 +4,6 @@ The model module of [MToolkit](https://github.com/mtoolkit/mtoolkit) framework.
 
 # Summary
 - [Intro](#intro)
-- []()
 
 #<a name="intro"></a>Intro
 The module provides the classes to represent x-dimensional models, as list or table.
