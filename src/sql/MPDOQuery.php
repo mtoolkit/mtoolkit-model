@@ -118,12 +118,20 @@ class MPDOQuery extends MAbstractSqlQuery
     /**
      * Bind the <i>values</i> to query.
      * Sort the values in the array in order with the '<i>?</i>' in the sql statement.
-     * 
-     * @param array $values
+     *
+     * @param array|int $values,...
      */
-    public function bindValues( array $values )
+    public function bindValues( $values )
     {
-        $this->bindedValues = new \ArrayObject($values);
+        $params = func_get_args();
+        if( isset($params[0]) && is_array( $params[0] ) )
+        {
+            $this->bindedValues = new \ArrayObject($params[0]);
+        }
+        else
+        {
+            $this->bindedValues = new \ArrayObject($params);
+        }
     }
 
     /**
