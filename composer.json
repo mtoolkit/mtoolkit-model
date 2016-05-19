@@ -28,5 +28,10 @@
     "psr-4": {
       "mtoolkit\\model\\": "./src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "mtoolkit\\model\\test\\": "./test/"
+    }
   }
 }
