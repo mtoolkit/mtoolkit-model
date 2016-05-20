@@ -171,9 +171,12 @@ class MPDOResult extends MAbstractSqlResult
         return $this;
     }
 
+    /**
+     * @return MSqlRecord
+     */
     public function current()
     {
-        return $this->rows[$this->getAt()];
+        return new MSqlRecord($this->rows[$this->getAt()]);
     }
 
     public function key()
@@ -198,7 +201,7 @@ class MPDOResult extends MAbstractSqlResult
     {
         if( $this->offsetExists( $offset ) )
         {
-            return $this->rows[$offset];
+            return new MSqlRecord($this->rows[$offset]);
         }
 
         return null;
