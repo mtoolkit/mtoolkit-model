@@ -2,29 +2,29 @@
 
 namespace mtoolkit\model\sql;
 
-/*
- * This file is part of MToolkit.
- *
- * MToolkit is free software: you can redistribute it and/or modify
- * it under the terms of the LGNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License; or
- * (at your option) any later version.
- *
- * MToolkit is distributed in the hope that it will be useful;
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * LGNU Lesser General Public License for more details.
- *
- * You should have received a copy of the LGNU Lesser General Public License
- * along with MToolkit.  If not; see <http://www.gnu.org/licenses/>.
- * 
- * @author  Michele Pagnin
- */
+    /*
+     * This file is part of MToolkit.
+     *
+     * MToolkit is free software: you can redistribute it and/or modify
+     * it under the terms of the LGNU Lesser General Public License as published by
+     * the Free Software Foundation; either version 3 of the License; or
+     * (at your option) any later version.
+     *
+     * MToolkit is distributed in the hope that it will be useful;
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * LGNU Lesser General Public License for more details.
+     *
+     * You should have received a copy of the LGNU Lesser General Public License
+     * along with MToolkit.  If not; see <http://www.gnu.org/licenses/>.
+     * 
+     * @author  Michele Pagnin
+     */
 
 /**
  * The MSqlError class provides SQL database error information.<br />
- * A MSqlError object can provide database-specific error data, including the 
- * <i>driverText()</i> and <i>databaseText()</i> messages (or both concatenated 
+ * A MSqlError object can provide database-specific error data, including the
+ * <i>driverText()</i> and <i>databaseText()</i> messages (or both concatenated
  * together as  <i>text()</i>), and the <i>nativeErrorCode()</i> and <i>type()</i>.
  */
 class MSqlError
@@ -52,8 +52,9 @@ class MSqlError
     }
 
     /**
-     * Returns the text of the error as reported by the driver. This may contain database-specific descriptions. It may also be empty.
-     * 
+     * Returns the text of the error as reported by the driver. This may contain database-specific descriptions. It may
+     * also be empty.
+     *
      * @return string|null
      */
     public function getDriverText()
@@ -62,8 +63,9 @@ class MSqlError
     }
 
     /**
-     * Returns the text of the error as reported by the database. This may contain database-specific descriptions; it may be empty.
-     * 
+     * Returns the text of the error as reported by the database. This may contain database-specific descriptions; it
+     * may be empty.
+     *
      * @return string|null
      */
     public function getDatabaseText()
@@ -73,7 +75,7 @@ class MSqlError
 
     /**
      * Returns the error type, or -1 if the type cannot be determined.
-     * 
+     *
      * @return ErrorType
      */
     public function getType()
@@ -83,7 +85,7 @@ class MSqlError
 
     /**
      * Returns the database-specific error code, or an empty string if it cannot be determined.
-     * 
+     *
      * @return string
      */
     public function getNativeErrorCode()
@@ -102,17 +104,18 @@ class MSqlError
      *      echo "ERROR!!!";
      * }
      * </code>
-     * 
+     *
      * @return boolean
      */
     public function isValid()
     {
-        return !( $this->driverText == "" && $this->databaseText == "" && $this->type == ErrorType::NO_ERROR && $this->code == "" );
+        return !($this->driverText == "" && $this->databaseText == "" && $this->type == ErrorType::NO_ERROR && $this->code == "");
     }
 
     /**
-     * This is a convenience function that returns <i>databaseText()</i> and <i>driverText()</i> concatenated into a single string.
-     * 
+     * This is a convenience function that returns <i>databaseText()</i> and <i>driverText()</i> concatenated into a
+     * single string.
+     *
      * @return string
      */
     public function text()
@@ -129,5 +132,5 @@ final class ErrorType
     const STATEMENT_ERROR = 2;
     const TRANSACTION_ERROR = 3;
     const UNKNOWN_ERROR = 4;
-
+    const BINDING_ERROR = 5;
 }
