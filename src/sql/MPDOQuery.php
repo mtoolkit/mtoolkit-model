@@ -22,7 +22,7 @@ namespace mtoolkit\model\sql;
 use mtoolkit\core\MObject;
 
 /**
- * The QSqlQuery class provides a means of executing and manipulating SQL 
+ * The QSqlQuery class provides a means of executing and manipulating SQL
  * statements.
  */
 class MPDOQuery extends MAbstractSqlQuery
@@ -53,9 +53,9 @@ class MPDOQuery extends MAbstractSqlQuery
         parent::__construct( $parent );
 
         $this->setQuery( $query )
-                ->setConnection( $connection );
+            ->setConnection( $connection );
 
-        if ( $this->getConnection() == null )
+        if( $this->getConnection() == null )
         {
             $this->setConnection( MDbConnection::getDbConnection() );
         }
@@ -70,18 +70,18 @@ class MPDOQuery extends MAbstractSqlQuery
     }
 
     /**
-     * Prepares the SQL query query for execution. Returns true if the query is 
+     * Prepares the SQL query query for execution. Returns true if the query is
      * prepared successfully; otherwise returns false.<br />
-     * The query may contain placeholders for binding values. Both Oracle style 
-     * colon-name (e.g., :surname), and ODBC style (?) placeholders are 
-     * supported; but they cannot be mixed in the same query. See the Detailed 
+     * The query may contain placeholders for binding values. Both Oracle style
+     * colon-name (e.g., :surname), and ODBC style (?) placeholders are
+     * supported; but they cannot be mixed in the same query. See the Detailed
      * Description for examples.<br />
-     * Portability note: Some databases choose to delay preparing a query until 
-     * it is executed the first time. In this case, preparing a syntactically 
+     * Portability note: Some databases choose to delay preparing a query until
+     * it is executed the first time. In this case, preparing a syntactically
      * wrong query succeeds, but every consecutive exec() will fail.<br />
-     * For SQLite, the query string can contain only one statement at a time. If 
+     * For SQLite, the query string can contain only one statement at a time. If
      * more than one statements are give, the function returns false.
-     * 
+     *
      * @param string $query
      * @return bool
      */
@@ -89,7 +89,7 @@ class MPDOQuery extends MAbstractSqlQuery
     {
         $sqlStmt = $this->getConnection()->prepare( $query );
 
-        if ( $sqlStmt == false )
+        if( $sqlStmt == false )
         {
             return false;
         }
@@ -109,12 +109,12 @@ class MPDOQuery extends MAbstractSqlQuery
     {
         if( $this->getPDOType( $value ) === false )
         {
-            throw new \Exception( gettype($value) . " is an invalid type to bind. ");
+            throw new \Exception( gettype( $value ) . " is an invalid type to bind. " );
         }
-        
+
         $this->bindedValues[] = $value;
     }
-    
+
     /**
      * Bind the <i>values</i> to query.
      * Sort the values in the array in order with the '<i>?</i>' in the sql statement.
@@ -126,22 +126,22 @@ class MPDOQuery extends MAbstractSqlQuery
         $params = func_get_args();
         if( isset($params[0]) && is_array( $params[0] ) )
         {
-            $this->bindedValues = new \ArrayObject($params[0]);
+            $this->bindedValues = new \ArrayObject( $params[0] );
         }
         else
         {
-            $this->bindedValues = new \ArrayObject($params);
+            $this->bindedValues = new \ArrayObject( $params );
         }
     }
 
     /**
-     * 
+     *
      * @param mixed $value
      * @return \PDO::PARAM_INT|\PDO::PARAM_BOOL|\PDO::PARAM_NULL|\PDO::PARAM_STR
      */
     private function getPDOType( $value )
-    {        
-        switch ( true )
+    {
+        switch( true )
         {
             case is_int( $value ):
                 return \PDO::PARAM_INT;
@@ -160,101 +160,101 @@ class MPDOQuery extends MAbstractSqlQuery
      * Executes a previously prepared SQL query. Returns true if the query
      * executed successfully; otherwise returns false.<br />
      * Note that the last error for this query is reset when exec() is called.
+     *
      * @return bool
      * @throws \Exception
      */
     public function exec()
     {
-        /* @var $sqlStmt \PDOStatement */ $sqlStmt = $this->getConnection()->prepare( $this->getQuery() );
+        /* @var $sqlStmt \PDOStatement */
+        $sqlStmt = $this->getConnection()->prepare( $this->getQuery() );
 
-        if ( $sqlStmt === false )
+        if( $sqlStmt === false )
         {
-            $errorInfo=$this->getConnection()->errorInfo();
-            
-            parent::setLastError(new MSqlError($errorInfo[2], (string)$errorInfo[1], ErrorType::CONNECTION_ERROR, $this->getConnection()->errorCode()));
-            
-            $this->result = new MPDOResult( $sqlStmt );            
-            return false;
+            return $this->execFails( $sqlStmt, ErrorType::CONNECTION_ERROR );
         }
 
         // Bind input
-        foreach ( $this->bindedValues as /* @var $i int */ $i => $bindedValue )
+        foreach( $this->bindedValues as /* @var $i int */
+                 $i => $bindedValue )
         {
             $type = $this->getPDOType( $bindedValue );
 
-            if ( $type === false )
+            if( $type === false )
             {
-                throw new \Exception( 'Invalid type of binded value at position ' . ($i+1) . '.' );
+                throw new \Exception( 'Invalid type of binded value at position ' . ($i + 1) . '.' );
             }
 
-            $bindParamsResult = $sqlStmt->bindValue( $i+1, $bindedValue, $type );
+            $bindParamsResult = $sqlStmt->bindValue( $i + 1, $bindedValue, $type );
 
-            if ( $bindParamsResult === false )
+            if( $bindParamsResult === false )
             {
-                $errorInfo=$sqlStmt->errorInfo();
-                
-                parent::setLastError(new MSqlError($errorInfo[2], (string)$errorInfo[1], ErrorType::STATEMENT_ERROR, $sqlStmt->errorCode()));
-
-                return false;
+                return $this->execFails( $sqlStmt, ErrorType::BINDING_ERROR );
             }
         }
 
         // Exec query
         $result = $sqlStmt->execute();
 
-        if ( $result == false )
+        if( $result == false )
         {
-            $errorInfo=$sqlStmt->errorInfo();
-            
-            parent::setLastError(new MSqlError($errorInfo[2], (string)$errorInfo[1], ErrorType::STATEMENT_ERROR, $sqlStmt->errorCode()));
-
-            return false;
+            return $this->execFails( $sqlStmt, ErrorType::STATEMENT_ERROR );
         }
 
         $this->result = new MPDOResult( $sqlStmt );
-        
+
         $sqlStmt->closeCursor();
 
         return true;
     }
 
+    private function execFails( \PDOStatement $sqlStmt, $errorType )
+    {
+        $errorInfo = $sqlStmt->errorInfo();
+
+        parent::setLastError( new MSqlError( $errorInfo[2], (string)$errorInfo[1], $errorType, $sqlStmt->errorCode() ) );
+        $this->result = new MPDOResult( new \PDOStatement(), $this );
+
+        return false;
+    }
+
     /**
      * Returns the result associated with the query.
-     * 
+     *
      * @return MPDOResult
      */
     public function getResult()
     {
         return $this->result;
     }
-    
+
     /**
-     * Returns the object ID of the most recent inserted row if the database 
-     * supports it. An invalid QVariant will be returned if the query did not 
-     * insert any value or if the database does not report the id back. If more 
+     * Returns the object ID of the most recent inserted row if the database
+     * supports it. An invalid QVariant will be returned if the query did not
+     * insert any value or if the database does not report the id back. If more
      * than one row was touched by the insert, the behavior is undefined.
-     * 
+     *
      * @return string
      */
     public function getLastInsertId()
     {
         return $this->getConnection()->lastInsertId();
     }
-    
+
     /**
-     * Returns the number of rows affected by the result's SQL statement, or -1 
-     * if it cannot be determined. Note that for SELECT statements, the value is 
+     * Returns the number of rows affected by the result's SQL statement, or -1
+     * if it cannot be determined. Note that for SELECT statements, the value is
      * undefined; use size() instead. If the query is not active, -1 is returned.
-     * 
+     *
      * @return int
      */
     public function getNumRowsAffected()
     {
-        if( $this->result==null )
+        if( $this->result == null )
         {
             return -1;
         }
-        
+
         return $this->result->getNumRowsAffected();
     }
 
