@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model;
 
 /*
@@ -26,58 +27,58 @@ use mtoolkit\core\MObject;
 abstract class MAbstractDataModel extends MObject
 {
 
-    public function __construct( MObject $parent = null )
+    public function __construct(MObject $parent = null)
     {
-        parent::__construct( $parent );
+        parent::__construct($parent);
     }
 
     /**
      * Returns the data for the given <i>$section</i> in the header with the specified <i>$orientation</i>.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
      * @return null
      */
-    public function getHeaderData( $section, $orientation )
+    public function getHeaderData($section, int $orientation)
     {
         return null;
     }
-    
+
     /**
      * Sets the data for the given <i>$section</i> in the header with the specified <i>$orientation</i> to the value supplied.<br />
      * Returns true if the header's data was updated; otherwise returns false.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
      * @param mixed $value
-     * @return false
+     * @return bool
      */
-    public function setHeaderData( $section, $orientation, $value )
+    public function setHeaderData($section, int $orientation, $value): bool
     {
         return false;
     }
 
     /**
      * Return the number of rows in resultset.
-     * 
+     *
      * @return int
      */
-    public abstract function rowCount();
+    public abstract function rowCount(): int;
 
     /**
      * Return the number of columns in resultset.
-     * 
+     *
      * @return int
      */
-    public abstract function columnCount();
+    public abstract function columnCount(): int;
 
     /**
      * Return the data at the <i>row</i> and <i>column</i>.
-     * 
+     *
      * @param int $row
      * @param mixed $column
      */
-    public abstract function getData( $row, $column );
+    public abstract function getData(int $row, $column);
 
     /**
      * Returns true if element has any children; otherwise returns false.
@@ -85,7 +86,7 @@ abstract class MAbstractDataModel extends MObject
      * @param int $column
      * @return boolean
      */
-    public function hasChildren( $row, $column )
+    public function hasChildren(int $row, int $column): bool
     {
         return false;
     }

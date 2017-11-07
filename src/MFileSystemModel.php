@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model;
 
 /*
@@ -41,7 +42,7 @@ class MFileSystemModel extends MAbstractDataModel
      * @signal This signal is emitted whenever the root path has been changed to a newPath.
      */
 
-    const ROOT_PATH_CHANGED = "ROOT_PATH_CHANGED";
+    private const ROOT_PATH_CHANGED = "ROOT_PATH_CHANGED";
 
     /**
      * @var string
@@ -61,103 +62,99 @@ class MFileSystemModel extends MAbstractDataModel
 
     /**
      * Returns true if the item at <i>$row</i> position represents a directory; otherwise returns false.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return boolean
      */
-    public function isDir($row, $column)
+    public function isDir($row, $column): bool
     {
         $file = $this->getData($row, $column);
-        
-        if( $file==null )
-        {
+
+        if ($file == null) {
             return false;
         }
-        
+
         $file = rtrim($file, DIRECTORY_SEPARATOR);
         $file = $this->rootPath . DIRECTORY_SEPARATOR . $file;
 
         return is_dir($file);
     }
-    
+
     /**
      * Returns the path of the item at <i>$row</i> position stored in the model under the index given.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return null|string
      */
-    public function filePath($row, $column)
+    public function filePath($row, $column):?string
     {
-        $file=$this->getData($row, $column);
-        
-        if( $file==null )
-        {
+        $file = $this->getData($row, $column);
+
+        if ($file == null) {
             return null;
         }
-        
+
         $file = rtrim($file, DIRECTORY_SEPARATOR);
         $file = $this->rootPath . DIRECTORY_SEPARATOR . $file;
-        
+
         return $file;
     }
 
     /**
      * Returns the date and time when index was last modified.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return null|\DateTime
      */
-    public function lastModified($row, $column)
+    public function lastModified($row, $column):?\DateTime
     {
-        $file=$this->getData($row, $column);
-        
-        if( $file==null )
-        {
+        $file = $this->getData($row, $column);
+
+        if ($file == null) {
             return null;
         }
-        
+
         $file = rtrim($file, DIRECTORY_SEPARATOR);
         $file = $this->rootPath . DIRECTORY_SEPARATOR . $file;
-        
-        $format="YmdHis";
-        
-        $dateTime=\DateTime::createFromFormat($format, date ($format, filemtime($file)));
-        
+
+        $format = "YmdHis";
+
+        $dateTime = \DateTime::createFromFormat($format, date($format, filemtime($file)));
+
         return $dateTime;
     }
-    
+
     /**
      * @return int
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return 1;
     }
 
-    public function getData($row, $column)
+    public function getData(int $row, $column)
     {
-        if ($row < 0 || $row >= $this->rowCount() || $column < 0 || $column >= $this->columnCount())
-        {
+        if ($row < 0 || $row >= $this->rowCount() || $column < 0 || $column >= $this->columnCount()) {
             return null;
         }
-        
+
         return $this->fileList[$row];
     }
 
     /**
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return count($this->fileList);
     }
 
     /**
      * The currently set root path.
-     * 
+     *
      * @return null|string
      */
     public function getRoot()
@@ -169,14 +166,13 @@ class MFileSystemModel extends MAbstractDataModel
      * Sets the directory that is being watched by the model to newPath by installing a file system watcher on it. Any
      * changes to files and directories within this directory will be reflected in the model.<br>
      * If the path is changed, the ROOT_PATH_CHANGED signal will be emitted.
-     * 
+     *
      * @param string $rootPath
      * @return \MToolkit\Model\MFileSystemModel
      */
-    public function setRoot($rootPath)
+    public function setRoot(string $rootPath)
     {
-        if (file_exists($rootPath) === false)
-        {
+        if (file_exists($rootPath) === false) {
             return null;
         }
 
@@ -188,61 +184,57 @@ class MFileSystemModel extends MAbstractDataModel
 
         return $this;
     }
-    
+
     /**
      * Returns the size in bytes of file at <i>$row</i> position.
      * If the file does not exist, 0 is returned.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return int
      */
-    public function size($row, $column)
+    public function size(int $row, int $column)
     {
-        $file=$this->getData($row, $column);
-        
-        if( $file==null )
-        {
+        $file = $this->getData($row, $column);
+
+        if ($file == null) {
             return 0;
         }
-        
+
         $file = rtrim($file, DIRECTORY_SEPARATOR);
         $file = $this->rootPath . DIRECTORY_SEPARATOR . $file;
-        
-        if( file_exists($file)===false )
-        {
+
+        if (file_exists($file) === false) {
             return 0;
         }
-        
+
         return filesize($file);
     }
 
     /**
      * Returns the type of file at <i>$row</i> position, like <i>filetype</i>.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return null|string
      */
-    public function type($row, $column)
+    public function type(int $row, int $column)
     {
-        $file=$this->getData($row, $column);
-        
-        if( $file==null )
-        {
+        $file = $this->getData($row, $column);
+
+        if ($file == null) {
             return null;
         }
-        
+
         $file = rtrim($file, DIRECTORY_SEPARATOR);
         $file = $this->rootPath . DIRECTORY_SEPARATOR . $file;
-        
-        $fileType= filetype($file);
-        
-        if( $fileType!='file' )
-        {
+
+        $fileType = filetype($file);
+
+        if ($fileType != 'file') {
             return $fileType;
         }
-        
+
         return mime_content_type($file);
     }
 }

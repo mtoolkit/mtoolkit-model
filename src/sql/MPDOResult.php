@@ -85,7 +85,7 @@ class MPDOResult extends MAbstractSqlResult
      * 
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->rowCount;
     }
@@ -95,7 +95,7 @@ class MPDOResult extends MAbstractSqlResult
      * 
      * @return int
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return $this->columnCount;
     }
@@ -105,18 +105,19 @@ class MPDOResult extends MAbstractSqlResult
      * 
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
 
     /**
      * Return the data at the <i>row</i> and <i>column</i>.
-     * 
+     *
      * @param int $row
      * @param int|string $column
+     * @return mixed
      */
-    public function getData( $row, $column )
+    public function getData(int $row, $column)
     {
         return $this->rows[$row][$column];
     }

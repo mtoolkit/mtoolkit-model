@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model;
 
 /*
@@ -39,68 +40,66 @@ class MListModel extends MAbstractDataModel
     {
         parent::__construct($parent);
 
-        $this->data=new MList();
+        $this->data = new MList();
     }
 
-    public function setDataFromArray( array $data )
+    public function setDataFromArray(array $data)
     {
         $this->data->fromArray($data);
     }
-    
+
     /**
      * Return the number of rows in resultset.
-     * 
+     *
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->data->size();
     }
 
     /**
      * Return the number of columns in resultset.
-     * 
+     *
      * @return int
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return 1;
     }
 
     /**
      * Return the data at the <i>row</i> and <i>column</i>.
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return mixed
      */
-    public function getData($row, $column = 0)
+    public function getData(int $row, $column = 0)
     {
         return $this->data->at($row);
     }
-    
+
     /**
      * Returns the data for the given <i>$section</i> in the header with the specified <i>$orientation</i>.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
-     * @return null
+     * @return mixed
      */
-    public function getHeaderData( $section, $orientation )
+    public function getHeaderData($section, int $orientation)
     {
         $headerData = null;
 
-        if( $this->data->size() >0 )
-        {
+        if ($this->data->size() > 0) {
             return $headerData;
         }
 
-        switch( $orientation )
-        {
+        switch ($orientation) {
             case Orientation::HORIZONTAL:
                 break;
             case Orientation::VERTICAL:
-                $fields = array_keys( $this->data->toArray() );
+                $fields = array_keys($this->data->toArray());
                 $headerData = $fields[$section];
                 break;
         }
@@ -111,30 +110,28 @@ class MListModel extends MAbstractDataModel
     /**
      * Sets the data for the given <i>$section</i> in the header with the specified <i>$orientation</i> to the value supplied.<br />
      * Returns true if the header's data was updated; otherwise returns false.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
      * @param mixed $value
-     * @return false
+     * @return bool
      */
-    public function setHeaderData( $section, $orientation, $value )
+    public function setHeaderData($section, int $orientation, $value): bool
     {
         $toReturn = false;
 
-        if( $this->data->size() >0 )
-        {
+        if ($this->data->size() > 0) {
             return $toReturn;
         }
 
-        switch( $orientation )
-        {
+        switch ($orientation) {
             case Orientation::HORIZONTAL:
                 break;
             case Orientation::VERTICAL:
-                $fields = array_keys( $this->data->toArray() );
-                $values = array_values( $this->data->toArray() );
+                $fields = array_keys($this->data->toArray());
+                $values = array_values($this->data->toArray());
                 $fields[$section] = $value;
-                $this->data = array_combine( $fields, $values );
+                $this->data = array_combine($fields, $values);
                 $toReturn = true;
                 break;
         }

@@ -44,7 +44,7 @@ class MSqlField
      * @param string $name
      * @param int $type MDataType::INT, MDataType::LONG, MDataType::BOOLEAN, etc
      */
-    public function __construct($name="", $type=99)
+    public function __construct(string $name = "", int $type = 99)
     {
         $this->clear();
         
@@ -103,7 +103,7 @@ class MSqlField
      * @param mixed $value
      * @return MSqlField
      */
-    public function setValue( $value )
+    public function setValue($value): MSqlField
     {
         $this->value = $value;
         return $this;
@@ -116,7 +116,7 @@ class MSqlField
      * 
      * @return int
      */
-    public function getLenght()
+    public function getLenght(): int
     {
         return $this->lenght;
     }
@@ -129,7 +129,7 @@ class MSqlField
      * @param int $lenght
      * @return MSqlField
      */
-    public function setLenght( $lenght )
+    public function setLenght(int $lenght)
     {
         $this->lenght = $lenght;
         return $this;

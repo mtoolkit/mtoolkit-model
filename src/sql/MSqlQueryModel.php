@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -26,74 +27,70 @@ use mtoolkit\model\MAbstractDataModel;
 class MSqlQueryModel extends MAbstractDataModel
 {
     /**
-     * @var MAbstractSqlQuery 
+     * @var MAbstractSqlQuery
      */
     private $query;
-    
+
     /**
      * Creates an empty MSqlQueryModel with the given parent.
-     * 
+     *
      * @param \MToolkit\Core\MObject $parent
      */
-    public function __construct( MObject $parent=null )
+    public function __construct(MObject $parent = null)
     {
         parent::__construct($parent);
     }
 
     /**
      * Returns the QSqlQuery associated with this model.
-     * 
+     *
      * @param string $query
      * @param \PDO|null $db
      * @throws \Exception
      */
-    public function setQuery( $query, $db = null )
+    public function setQuery($query, $db = null)
     {
-        if( $db==null )
-        {
-            $db= MDbConnection::getDbConnection();
+        if ($db == null) {
+            $db = MDbConnection::getDbConnection();
         }
-        
-        if( $db instanceof \PDO )
-        {
-            $this->query=new MPDOQuery($query, $db);
-        }
-        else
-        {
+
+        if ($db instanceof \PDO) {
+            $this->query = new MPDOQuery($query, $db);
+        } else {
             throw new \Exception("Database connection not supported.");
         }
-        
+
         $this->query->exec();
     }
-    
+
     /**
      * Reimplemented from MAbstractDataModel::columnCount().
-     * 
+     *
      * @return int
      */
-    public function columnCount()
+    public function columnCount(): int
     {
         return $this->query->getResult()->columnCount();
     }
 
     /**
      * Reimplemented from MAbstractDataModel::getData().
-     * 
+     *
      * @param int $row
      * @param int $column
      * @return mixed
      */
-    public function getData($row, $column)
+    public function getData(int $row, $column)
     {
         return $this->query->getResult()->getData($row, $column);
     }
 
     /**
      * Reimplemented from MAbstractDataModel::rowCount().
-     * 
+     *
      * @return int
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->query->getResult()->rowCount();
     }

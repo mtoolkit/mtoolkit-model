@@ -37,7 +37,7 @@ class MTableModel extends MAbstractDataModel
         $this->data = $data;
     }
 
-    public function columnCount()
+    public function columnCount(): int
     {
         if( $this->rowCount()<=0 )
         {
@@ -47,12 +47,12 @@ class MTableModel extends MAbstractDataModel
         return count( $this->data[0] );
     }
 
-    public function getData( $row, $column )
+    public function getData(int $row, $column)
     {
         return $this->data[$row][$column];
     }
 
-    public function rowCount()
+    public function rowCount(): int
     {
         return count( $this->data );
     }
@@ -64,7 +64,7 @@ class MTableModel extends MAbstractDataModel
      * @param int|Orientation $orientation
      * @return null
      */
-    public function getHeaderData( $section, $orientation )
+    public function getHeaderData($section, int $orientation)
     {
         $headerData = null;
 
@@ -97,9 +97,9 @@ class MTableModel extends MAbstractDataModel
      * @param int|string $section
      * @param int|Orientation $orientation
      * @param mixed $value
-     * @return false
+     * @return bool
      */
-    public function setHeaderData( $section, $orientation, $value )
+    public function setHeaderData($section, int $orientation, $value): bool
     {
         $toReturn = false;
 

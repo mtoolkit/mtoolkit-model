@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -30,37 +31,37 @@ abstract class MAbstractSqlResult extends MTableModel implements \ArrayAccess, \
      */
     private $lastError = null;
 
-    public function __construct( MObject $parent = null )
+    public function __construct(MObject $parent = null)
     {
-        parent::__construct( $parent );
-        
-        $this->lastError=new MSqlError();
+        parent::__construct($parent);
+
+        $this->lastError = new MSqlError();
     }
 
     /**
      * Return an array contains the names of the fields.
-     * 
+     *
      * @return array
      */
-    public abstract function getFields();
+    public abstract function getFields(): array;
 
     /**
      * Returns the last error associated with the result.
-     * 
+     *
      * @return MSqlError
      */
-    protected function getLastError()
+    protected function getLastError(): MSqlError
     {
         return $this->lastError;
     }
 
     /**
      * This function is provided for derived classes to set the last error to <i>$error</i>.
-     * 
+     *
      * @param MSqlError $lastError
      * @return MAbstractSqlResult
      */
-    protected function setLastError( $lastError )
+    protected function setLastError($lastError): MAbstractSqlResult
     {
         $this->lastError = $lastError;
         return $this;

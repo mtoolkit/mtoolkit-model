@@ -23,7 +23,7 @@ namespace mtoolkit\model\sql;
 use mtoolkit\core\MObject;
 
 /**
- * The QSqlQuery class provides a means of executing and manipulating SQL 
+ * The QSqlQuery class provides a means of executing and manipulating SQL
  * statements.
  */
 abstract class MAbstractSqlQuery extends MObject
@@ -33,15 +33,15 @@ abstract class MAbstractSqlQuery extends MObject
      */
     private $lastError = null;
 
-    public function __construct( MObject $parent = null )
+    public function __construct(MObject $parent = null)
     {
-        parent::__construct( $parent );
-        
-        $this->lastError=new MSqlError();
+        parent::__construct($parent);
+
+        $this->lastError = new MSqlError();
     }
 
     /**
-     * @var string 
+     * @var string
      */
     private $query;
 
@@ -51,25 +51,25 @@ abstract class MAbstractSqlQuery extends MObject
     private $connection;
 
     /**
-     * Executes a previously prepared SQL query. Returns true if the query 
+     * Executes a previously prepared SQL query. Returns true if the query
      * executed successfully; otherwise returns false.<br />
      * Note that the last error for this query is reset when exec() is called.
-     * 
+     *
      * @return bool The correct execution of the query.
      */
-    public abstract function exec();
+    public abstract function exec(): bool;
 
     /**
      * Returns the result associated with the query.
-     * 
+     *
      * @return MAbstractSqlResult The resultset of the query, if exists.
      */
-    public abstract function getResult();
+    public abstract function getResult(): MAbstractSqlResult;
 
     /**
      * @return string
      */
-    public function getQuery()
+    public function getQuery(): string
     {
         return $this->query;
     }
@@ -78,7 +78,7 @@ abstract class MAbstractSqlQuery extends MObject
      * @param string $query
      * @return \MToolkit\Model\Sql\MAbstractSqlQuery
      */
-    public function setQuery( $query )
+    public function setQuery(string $query): MAbstractSqlQuery
     {
         $this->query = $query;
         return $this;
@@ -96,7 +96,7 @@ abstract class MAbstractSqlQuery extends MObject
      * @param mixed $connection
      * @return \MToolkit\Model\Sql\MAbstractSqlQuery
      */
-    protected function setConnection( $connection )
+    protected function setConnection($connection): MAbstractSqlQuery
     {
         $this->connection = $connection;
         return $this;
@@ -104,21 +104,21 @@ abstract class MAbstractSqlQuery extends MObject
 
     /**
      * Returns the last error associated with the result.
-     * 
+     *
      * @return MSqlError
      */
-    public function getLastError()
+    public function getLastError(): MSqlError
     {
         return $this->lastError;
     }
 
     /**
      * This function is provided for derived classes to set the last error to <i>$error</i>.
-     * 
+     *
      * @param MSqlError $lastError
-     * @return \MToolkit\Model\Sql\MAbstractSqlResult
+     * @return MAbstractSqlQuery
      */
-    public function setLastError( $lastError )
+    public function setLastError(MSqlError $lastError): MAbstractSqlQuery
     {
         $this->lastError = $lastError;
         return $this;

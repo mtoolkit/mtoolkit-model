@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -48,23 +49,22 @@ class MPDOQuery extends MAbstractSqlQuery
      * @param \PDO|null $connection
      * @param MObject|null $parent
      */
-    public function __construct( $query = null, \PDO $connection = null, MObject $parent = null )
+    public function __construct($query = null, \PDO $connection = null, MObject $parent = null)
     {
-        parent::__construct( $parent );
+        parent::__construct($parent);
 
-        $this->setQuery( $query )
-            ->setConnection( $connection );
+        $this->setQuery($query)
+            ->setConnection($connection);
 
-        if( $this->getConnection() == null )
-        {
-            $this->setConnection( MDbConnection::getDbConnection() );
+        if ($this->getConnection() == null) {
+            $this->setConnection(MDbConnection::getDbConnection());
         }
     }
 
     /**
      * @return \PDO
      */
-    public function getConnection()
+    public function getConnection(): \PDO
     {
         return parent::getConnection();
     }
@@ -85,16 +85,15 @@ class MPDOQuery extends MAbstractSqlQuery
      * @param string $query
      * @return bool
      */
-    public function prepare( $query )
+    public function prepare($query): bool
     {
-        $sqlStmt = $this->getConnection()->prepare( $query );
+        $sqlStmt = $this->getConnection()->prepare($query);
 
-        if( $sqlStmt == false )
-        {
+        if ($sqlStmt == false) {
             return false;
         }
 
-        $this->setQuery( $query );
+        $this->setQuery($query);
         return true;
     }
 
@@ -105,11 +104,10 @@ class MPDOQuery extends MAbstractSqlQuery
      * @param mixed $value
      * @throws \Exception
      */
-    public function bindValue( $value )
+    public function bindValue($value): void
     {
-        if( $this->getPDOType( $value ) === false )
-        {
-            throw new \Exception( gettype( $value ) . " is an invalid type to bind. " );
+        if ($this->getPDOType($value) === false) {
+            throw new \Exception(gettype($value) . " is an invalid type to bind. ");
         }
 
         $this->bindedValues[] = $value;
@@ -121,35 +119,31 @@ class MPDOQuery extends MAbstractSqlQuery
      *
      * @param array|int $values,...
      */
-    public function bindValues( $values )
+    public function bindValues($values): void
     {
         $params = func_get_args();
-        if( isset($params[0]) && is_array( $params[0] ) )
-        {
-            $this->bindedValues = new \ArrayObject( $params[0] );
-        }
-        else
-        {
-            $this->bindedValues = new \ArrayObject( $params );
+        if (isset($params[0]) && is_array($params[0])) {
+            $this->bindedValues = new \ArrayObject($params[0]);
+        } else {
+            $this->bindedValues = new \ArrayObject($params);
         }
     }
 
     /**
      *
      * @param mixed $value
-     * @return \PDO::PARAM_INT|\PDO::PARAM_BOOL|\PDO::PARAM_NULL|\PDO::PARAM_STR
+     * @return int
      */
-    private function getPDOType( $value )
+    private function getPDOType($value): int
     {
-        switch( true )
-        {
-            case is_int( $value ):
+        switch (true) {
+            case is_int($value):
                 return \PDO::PARAM_INT;
-            case is_bool( $value ):
+            case is_bool($value):
                 return \PDO::PARAM_BOOL;
-            case is_null( $value ):
+            case is_null($value):
                 return \PDO::PARAM_NULL;
-            case is_string( $value ):
+            case is_string($value):
                 return \PDO::PARAM_STR;
         }
 
@@ -164,56 +158,51 @@ class MPDOQuery extends MAbstractSqlQuery
      * @return bool
      * @throws \Exception
      */
-    public function exec()
+    public function exec(): bool
     {
         /* @var $sqlStmt \PDOStatement */
-        $sqlStmt = $this->getConnection()->prepare( $this->getQuery() );
+        $sqlStmt = $this->getConnection()->prepare($this->getQuery());
 
-        if( $sqlStmt === false )
-        {
-            return $this->execFails( $sqlStmt, ErrorType::CONNECTION_ERROR );
+        if ($sqlStmt === false) {
+            return $this->execFails($sqlStmt, ErrorType::CONNECTION_ERROR);
         }
 
         // Bind input
-        foreach( $this->bindedValues as /* @var $i int */
-                 $i => $bindedValue )
-        {
-            $type = $this->getPDOType( $bindedValue );
+        foreach ($this->bindedValues as /* @var $i int */
+                 $i => $bindedValue) {
+            $type = $this->getPDOType($bindedValue);
 
-            if( $type === false )
-            {
-                throw new \Exception( 'Invalid type of binded value at position ' . ($i + 1) . '.' );
+            if ($type === false) {
+                throw new \Exception('Invalid type of binded value at position ' . ($i + 1) . '.');
             }
 
-            $bindParamsResult = $sqlStmt->bindValue( $i + 1, $bindedValue, $type );
+            $bindParamsResult = $sqlStmt->bindValue($i + 1, $bindedValue, $type);
 
-            if( $bindParamsResult === false )
-            {
-                return $this->execFails( $sqlStmt, ErrorType::BINDING_ERROR );
+            if ($bindParamsResult === false) {
+                return $this->execFails($sqlStmt, ErrorType::BINDING_ERROR);
             }
         }
 
         // Exec query
         $result = $sqlStmt->execute();
 
-        if( $result == false )
-        {
-            return $this->execFails( $sqlStmt, ErrorType::STATEMENT_ERROR );
+        if ($result == false) {
+            return $this->execFails($sqlStmt, ErrorType::STATEMENT_ERROR);
         }
 
-        $this->result = new MPDOResult( $sqlStmt );
+        $this->result = new MPDOResult($sqlStmt);
 
         $sqlStmt->closeCursor();
 
         return true;
     }
 
-    private function execFails( \PDOStatement $sqlStmt, $errorType )
+    private function execFails(\PDOStatement $sqlStmt, $errorType)
     {
         $errorInfo = $sqlStmt->errorInfo();
 
-        parent::setLastError( new MSqlError( $errorInfo[2], (string)$errorInfo[1], $errorType, $sqlStmt->errorCode() ) );
-        $this->result = new MPDOResult( new \PDOStatement(), $this );
+        parent::setLastError(new MSqlError($errorInfo[2], (string)$errorInfo[1], $errorType, $sqlStmt->errorCode()));
+        $this->result = new MPDOResult(new \PDOStatement(), $this);
 
         return false;
     }
@@ -221,9 +210,9 @@ class MPDOQuery extends MAbstractSqlQuery
     /**
      * Returns the result associated with the query.
      *
-     * @return MPDOResult
+     * @return MAbstractSqlResult
      */
-    public function getResult()
+    public function getResult(): MAbstractSqlResult
     {
         return $this->result;
     }
@@ -236,7 +225,7 @@ class MPDOQuery extends MAbstractSqlQuery
      *
      * @return string
      */
-    public function getLastInsertId()
+    public function getLastInsertId(): string
     {
         return $this->getConnection()->lastInsertId();
     }
@@ -248,10 +237,9 @@ class MPDOQuery extends MAbstractSqlQuery
      *
      * @return int
      */
-    public function getNumRowsAffected()
+    public function getNumRowsAffected(): int
     {
-        if( $this->result == null )
-        {
+        if ($this->result == null) {
             return -1;
         }
 

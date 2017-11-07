@@ -36,18 +36,6 @@ class MDbConnection
     {}
 
     /**
-     * Deprecated. Use <i>getDbConnection</i>.
-     * 
-     * @deprecated 
-     * @param string $name
-     * @return mixed
-     */
-    public static function dbConnection( $name="DefaultConnection" )
-    {
-        return MDbConnection::getDbConnection($name);
-    }
-    
-    /**
      * @param string $name
      * @return mixed
      */
@@ -77,7 +65,6 @@ class MDbConnection
 
     /**
      * @param string $name
-     * @return mixed
      */
     public static function removeDbConnection( $name="DefaultConnection" )
     {

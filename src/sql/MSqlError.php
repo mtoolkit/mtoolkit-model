@@ -2,24 +2,24 @@
 
 namespace mtoolkit\model\sql;
 
-    /*
-     * This file is part of MToolkit.
-     *
-     * MToolkit is free software: you can redistribute it and/or modify
-     * it under the terms of the LGNU Lesser General Public License as published by
-     * the Free Software Foundation; either version 3 of the License; or
-     * (at your option) any later version.
-     *
-     * MToolkit is distributed in the hope that it will be useful;
-     * but WITHOUT ANY WARRANTY; without even the implied warranty of
-     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     * LGNU Lesser General Public License for more details.
-     *
-     * You should have received a copy of the LGNU Lesser General Public License
-     * along with MToolkit.  If not; see <http://www.gnu.org/licenses/>.
-     * 
-     * @author  Michele Pagnin
-     */
+/*
+ * This file is part of MToolkit.
+ *
+ * MToolkit is free software: you can redistribute it and/or modify
+ * it under the terms of the LGNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License; or
+ * (at your option) any later version.
+ *
+ * MToolkit is distributed in the hope that it will be useful;
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * LGNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the LGNU Lesser General Public License
+ * along with MToolkit.  If not; see <http://www.gnu.org/licenses/>.
+ *
+ * @author  Michele Pagnin
+ */
 
 /**
  * The MSqlError class provides SQL database error information.<br />
@@ -43,7 +43,7 @@ class MSqlError
      * @param int $type
      * @param string $code
      */
-    public function __construct( $driverText = "", $databaseText = "", $type = ErrorType::NO_ERROR, $code = "" )
+    public function __construct(string $driverText = "", string $databaseText = "", int $type = ErrorType::NO_ERROR, string $code = "")
     {
         $this->driverText = $driverText;
         $this->databaseText = $databaseText;
@@ -55,9 +55,9 @@ class MSqlError
      * Returns the text of the error as reported by the driver. This may contain database-specific descriptions. It may
      * also be empty.
      *
-     * @return string|null
+     * @return null|string
      */
-    public function getDriverText()
+    public function getDriverText():?string
     {
         return $this->driverText;
     }
@@ -76,9 +76,9 @@ class MSqlError
     /**
      * Returns the error type, or -1 if the type cannot be determined.
      *
-     * @return ErrorType
+     * @return int|ErrorType
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
