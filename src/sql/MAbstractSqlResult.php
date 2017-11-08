@@ -61,7 +61,7 @@ abstract class MAbstractSqlResult extends MTableModel implements \ArrayAccess, \
      * @param MSqlError $lastError
      * @return MAbstractSqlResult
      */
-    protected function setLastError($lastError): MAbstractSqlResult
+    protected function setLastError(MSqlError $lastError): MAbstractSqlResult
     {
         $this->lastError = $lastError;
         return $this;

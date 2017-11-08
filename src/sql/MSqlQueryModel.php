@@ -23,6 +23,7 @@ namespace mtoolkit\model\sql;
 
 use mtoolkit\core\MObject;
 use mtoolkit\model\MAbstractDataModel;
+use PDO;
 
 class MSqlQueryModel extends MAbstractDataModel
 {
@@ -48,7 +49,7 @@ class MSqlQueryModel extends MAbstractDataModel
      * @param \PDO|null $db
      * @throws \Exception
      */
-    public function setQuery($query, $db = null)
+    public function setQuery(string $query, ?PDO $db = null)
     {
         if ($db == null) {
             $db = MDbConnection::getDbConnection();

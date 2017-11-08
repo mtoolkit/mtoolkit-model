@@ -23,10 +23,10 @@ namespace mtoolkit\model\sql;
 use mtoolkit\core\MDataType;
 
 /**
- * The MSqlField class manipulates the fields in SQL database tables and 
+ * The MSqlField class manipulates the fields in SQL database tables and
  * views.<br />
- * MSqlField represents the characteristics of a single column in a database 
- * table or view, such as the data type and column name. A field also contains 
+ * MSqlField represents the characteristics of a single column in a database
+ * table or view, such as the data type and column name. A field also contains
  * the value of the database column, which can be viewed or changed.
  */
 class MSqlField
@@ -36,37 +36,37 @@ class MSqlField
     private $defaultValue = null;
     private $lenght = -1;
     private $type;
-    private $name=null;
+    private $name = null;
 
     /**
      * Constructs an empty field called <i>$name</i> of variant type <i>$type</i>.
-     * 
+     *
      * @param string $name
      * @param int $type MDataType::INT, MDataType::LONG, MDataType::BOOLEAN, etc
      */
     public function __construct(string $name = "", int $type = 99)
     {
         $this->clear();
-        
-        $this->name=$name;
-        $this->type=$type;
+
+        $this->name = $name;
+        $this->type = $type;
     }
 
     /**
-     * Clears the value of the field and sets it to NULL. 
+     * Clears the value of the field and sets it to NULL.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->value = null;
         $this->defaultValue = null;
         $this->lenght = -1;
         $this->type = MDataType::UNKNOWN;
-        $this->name=null;
+        $this->name = null;
     }
 
     /**
      * Returns the field's default value (which may be NULL).
-     * 
+     *
      * @return mixed
      */
     public function getDefaultValue()
@@ -76,11 +76,11 @@ class MSqlField
 
     /**
      * Sets the default value used for this field to value.
-     * 
+     *
      * @param mixed $defaultValue
      * @return MSqlField
      */
-    public function setDefaultValue( $defaultValue )
+    public function setDefaultValue($defaultValue): MSqlField
     {
         $this->defaultValue = $defaultValue;
         return $this;
@@ -88,7 +88,7 @@ class MSqlField
 
     /**
      * Returns the value of the field.
-     * 
+     *
      * @return mixed
      */
     public function getValue()
@@ -99,7 +99,7 @@ class MSqlField
     /**
      * Sets the value of the field to value.<br />
      * To set the value to NULL, use clear().
-     * 
+     *
      * @param mixed $value
      * @return MSqlField
      */
@@ -111,9 +111,9 @@ class MSqlField
 
     /**
      * Returns the field's length.<br />
-     * If the returned value is negative, it means that the information is not 
+     * If the returned value is negative, it means that the information is not
      * available from the database.
-     * 
+     *
      * @return int
      */
     public function getLenght(): int
@@ -122,14 +122,14 @@ class MSqlField
     }
 
     /**
-     * Sets the field's length to <i>$lenght</i>. For strings this is the 
-     * maximum number of characters the string can hold; the meaning varies for 
+     * Sets the field's length to <i>$lenght</i>. For strings this is the
+     * maximum number of characters the string can hold; the meaning varies for
      * other types.
-     * 
+     *
      * @param int $lenght
      * @return MSqlField
      */
-    public function setLenght(int $lenght)
+    public function setLenght(int $lenght): MSqlField
     {
         $this->lenght = $lenght;
         return $this;
@@ -137,40 +137,40 @@ class MSqlField
 
     /**
      * Returns true if the field's value is NULL; otherwise returns false.
-     * 
+     *
      * @return boolean
      */
     public function isNull()
     {
         return ($this->value == null);
     }
-    
+
     /**
      * @return int MDataType::INT, MDataType::LONG, MDataType::BOOLEAN, etc
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
 
     /**
      * Set's the field's variant type to <i>$type</i>.
-     * 
+     *
      * @param int $type MDataType::INT, MDataType::LONG, MDataType::BOOLEAN, etc
      * @return MSqlField
      */
-    public function setType( $type )
+    public function setType(int $type): MSqlField
     {
         $this->type = $type;
         return $this;
     }
-    
+
     /**
      * Returns the name of the field.
-     * 
+     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -179,7 +179,7 @@ class MSqlField
      * @param string $name
      * @return MSqlField
      */
-    public function setName( $name )
+    public function setName(string $name)
     {
         $this->name = $name;
         return $this;

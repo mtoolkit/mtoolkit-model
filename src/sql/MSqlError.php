@@ -68,7 +68,7 @@ class MSqlError
      *
      * @return string|null
      */
-    public function getDatabaseText()
+    public function getDatabaseText():?string
     {
         return $this->databaseText;
     }
@@ -88,7 +88,7 @@ class MSqlError
      *
      * @return string
      */
-    public function getNativeErrorCode()
+    public function getNativeErrorCode():?string
     {
         return $this->code;
     }
@@ -107,7 +107,7 @@ class MSqlError
      *
      * @return boolean
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return !($this->driverText == "" && $this->databaseText == "" && $this->type == ErrorType::NO_ERROR && $this->code == "");
     }
@@ -118,7 +118,7 @@ class MSqlError
      *
      * @return string
      */
-    public function text()
+    public function text(): string
     {
         return $this->databaseText . " - " . $this->driverText;
     }
@@ -127,10 +127,10 @@ class MSqlError
 
 final class ErrorType
 {
-    const NO_ERROR = 0;
-    const CONNECTION_ERROR = 1;
-    const STATEMENT_ERROR = 2;
-    const TRANSACTION_ERROR = 3;
-    const UNKNOWN_ERROR = 4;
-    const BINDING_ERROR = 5;
+    public const NO_ERROR = 0;
+    public const CONNECTION_ERROR = 1;
+    public const STATEMENT_ERROR = 2;
+    public const TRANSACTION_ERROR = 3;
+    public const UNKNOWN_ERROR = 4;
+    public const BINDING_ERROR = 5;
 }

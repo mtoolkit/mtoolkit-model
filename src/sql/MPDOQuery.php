@@ -85,7 +85,7 @@ class MPDOQuery extends MAbstractSqlQuery
      * @param string $query
      * @return bool
      */
-    public function prepare($query): bool
+    public function prepare(string $query): bool
     {
         $sqlStmt = $this->getConnection()->prepare($query);
 

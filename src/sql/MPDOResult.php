@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -28,14 +29,14 @@ class MPDOResult extends MAbstractSqlResult
 {
     /**
      * Used to map a row of the resultset into an object.
-     * 
+     *
      * @var string
      */
-    private $className=null;
-    
+    private $className = null;
+
     /**
      * Contains the names of the fields.
-     * 
+     *
      * @var array
      */
     private $fields = array();
@@ -69,20 +70,20 @@ class MPDOResult extends MAbstractSqlResult
      * @param \PDOStatement $statement
      * @param MObject|null $parent
      */
-    public function __construct( \PDOStatement $statement, MObject $parent = null )
+    public function __construct(\PDOStatement $statement, MObject $parent = null)
     {
-        parent::__construct( $parent );
+        parent::__construct($parent);
 
         $this->statement = $statement;
-        $this->rows = $this->statement->fetchAll( \PDO::FETCH_ASSOC );
-        $this->fields = empty( $this->rows ) ? array() : array_keys( (array) $this->rows[0] );
-        $this->rowCount = count( $this->rows );
-        $this->columnCount = count( $this->fields );
+        $this->rows = $this->statement->fetchAll(\PDO::FETCH_ASSOC);
+        $this->fields = empty($this->rows) ? array() : array_keys((array)$this->rows[0]);
+        $this->rowCount = count($this->rows);
+        $this->columnCount = count($this->fields);
     }
 
     /**
      * Return the number of rows in resultset.
-     * 
+     *
      * @return int
      */
     public function rowCount(): int
@@ -92,7 +93,7 @@ class MPDOResult extends MAbstractSqlResult
 
     /**
      * Return the number of columns in resultset.
-     * 
+     *
      * @return int
      */
     public function columnCount(): int
@@ -102,7 +103,7 @@ class MPDOResult extends MAbstractSqlResult
 
     /**
      * Return an array contains the names of the fields.
-     * 
+     *
      * @return array
      */
     public function getFields(): array
@@ -130,29 +131,27 @@ class MPDOResult extends MAbstractSqlResult
     /**
      * Returns the current record if the query is active; otherwise returns an empty QSqlRecord. <br />
      * The default implementation always returns an empty QSqlRecord.
-     * 
+     *
      * @return MSqlRecord
      */
-    public function getRecord()
+    public function getRecord(): MSqlRecord
     {
-        return new MSqlRecord( $this->rows[$this->at] );
+        return new MSqlRecord($this->rows[$this->at]);
     }
 
     /**
-     * Returns the current (zero-based) row position of the result. May return 
+     * Returns the current (zero-based) row position of the result. May return
      * the special values MSql\Location::BeforeFirstRow or MSql\Location::AfterLastRow.
-     * 
+     *
      * @return int
      */
-    public function getAt()
+    public function getAt(): int
     {
-        if( $this->at < 0 )
-        {
+        if ($this->at < 0) {
             return Location::BeforeFirstRow;
         }
 
-        if( $this->at > $this->rowCount() )
-        {
+        if ($this->at > $this->rowCount()) {
             return Location::AfterLastRow;
         }
 
@@ -160,13 +159,13 @@ class MPDOResult extends MAbstractSqlResult
     }
 
     /**
-     * This function is provided for derived classes to set the internal 
+     * This function is provided for derived classes to set the internal
      * (zero-based) row position to <i>$at</i>.
-     * 
+     *
      * @param int $at
      * @return MPDOResult
      */
-    public function setAt( $at )
+    public function setAt(int $at)
     {
         $this->at = $at;
         return $this;
@@ -175,12 +174,15 @@ class MPDOResult extends MAbstractSqlResult
     /**
      * @return MSqlRecord
      */
-    public function current()
+    public function current(): MSqlRecord
     {
         return new MSqlRecord($this->rows[$this->getAt()]);
     }
 
-    public function key()
+    /**
+     * @return int
+     */
+    public function key(): int
     {
         return $this->getAt();
     }
@@ -188,62 +190,61 @@ class MPDOResult extends MAbstractSqlResult
     /**
      * Positions the result to the next available record (row) in the result.
      */
-    public function next()
+    public function next(): void
     {
         $this->at++;
     }
 
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        return (array_key_exists( $offset, $this->rows ) === true);
+        return (array_key_exists($offset, $this->rows) === true);
     }
 
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
-        if( $this->offsetExists( $offset ) )
-        {
+        if ($this->offsetExists($offset)) {
             return new MSqlRecord($this->rows[$offset]);
         }
 
         return null;
     }
 
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
-        throw new MReadOnlyObjectException( __CLASS__, __METHOD__ );
+        throw new MReadOnlyObjectException(__CLASS__, __METHOD__);
     }
 
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        throw new MReadOnlyObjectException( __CLASS__, __METHOD__ );
+        throw new MReadOnlyObjectException(__CLASS__, __METHOD__);
     }
 
     /**
      * Set current 0 as current row.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->at = 0;
     }
 
     /**
-     * Returns true if the result is positioned on a valid record (that is, the 
-     * result is not positioned before the first or after the last record); 
+     * Returns true if the result is positioned on a valid record (that is, the
+     * result is not positioned before the first or after the last record);
      * otherwise returns false.
-     * 
+     *
      * @return boolean
      */
-    public function valid()
+    public function valid(): bool
     {
-        return ( $this->at >= 0 && $this->at < $this->rowCount() );
+        return ($this->at >= 0 && $this->at < $this->rowCount());
     }
 
     /**
      * Returns the resultset as array.
-     * 
+     *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->rows;
     }
@@ -251,7 +252,7 @@ class MPDOResult extends MAbstractSqlResult
     /**
      * @return string
      */
-    public function getClassName()
+    public function getClassName(): string
     {
         return $this->className;
     }
@@ -260,42 +261,41 @@ class MPDOResult extends MAbstractSqlResult
      * @param string $className
      * @return MPDOResult
      */
-    public function setClassName( $className )
+    public function setClassName($className): MPDOResult
     {
         MDataType::mustBeNullableString($className);
-        
+
         $this->className = $className;
         return $this;
     }
 
     /**
-     * Returns instances of the specified class, mapping the columns of the 
+     * Returns instances of the specified class, mapping the columns of the
      * current row to named properties in the class.
-     * 
+     *
      * @return object
      */
     public function getCurrentObject()
     {
         return $this->getObjectAt($this->at);
     }
-    
+
     /**
-     * Returns instances of the specified class, mapping the columns of the 
+     * Returns instances of the specified class, mapping the columns of the
      * <i>$at</i> pos row to named properties in the class.
-     * 
+     *
      * @param int $at
      * @return object
      */
-    public function getObjectAt( $at )
+    public function getObjectAt(int $at)
     {
-        $row=$this->rows[$at];
-        $obj=new $this->className();
-        
-        foreach( $row as $key => $value )
-        {
-            $obj->$key=$value;
+        $row = $this->rows[$at];
+        $obj = new $this->className();
+
+        foreach ($row as $key => $value) {
+            $obj->$key = $value;
         }
-        
+
         return $obj;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -41,7 +42,7 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      *
      * @param array $record
      */
-    public function __construct( array $record = array() )
+    public function __construct(array $record = array())
     {
         $this->record = $record;
     }
@@ -51,15 +52,15 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
-        return count( $this->record );
+        return count($this->record);
     }
 
     /**
      * Removes all the record's fields.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->record = array();
     }
@@ -69,8 +70,7 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      */
     public function clearValues()
     {
-        foreach( $this->record as $key => $value )
-        {
+        foreach ($this->record as $key => $value) {
             $this->record[$key] = null;
         }
     }
@@ -82,9 +82,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string $name
      * @return mixed
      */
-    public function contains( $name )
+    public function contains(string $name)
     {
-        return array_key_exists( $name, $this->record );
+        return array_key_exists($name, $this->record);
     }
 
     /**
@@ -97,18 +97,17 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param int|string $name
      * @return MSqlField|null
      */
-    public function getField( $name )
+    public function getField($name):?MSqlField
     {
-        if( $this->contains( $name ) === false )
-        {
+        if ($this->contains($name) === false) {
             return null;
         }
 
         $value = $this->record[$name];
-        $type = MDataType::getType( $value );
+        $type = MDataType::getType($value);
 
-        $field = new MSqlField( $name, $type );
-        $field->setValue( $value );
+        $field = new MSqlField($name, $type);
+        $field->setValue($value);
         return $field;
     }
 
@@ -119,12 +118,11 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param int $index
      * @return null|string|int
      */
-    public function getFieldName( $index )
+    public function getFieldName(int $index)
     {
-        $keyArray = array_keys( $this->record );
+        $keyArray = array_keys($this->record);
 
-        if( $index > 0 && $index < $this->count() )
-        {
+        if ($index > 0 && $index < $this->count()) {
             return $keyArray[$index];
         }
 
@@ -139,16 +137,15 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string $name
      * @return int
      */
-    public function getIndexOf( $name )
+    public function getIndexOf(string $name): int
     {
-        if( array_key_exists( $name, $this->record ) == false )
-        {
+        if (array_key_exists($name, $this->record) == false) {
             return -1;
         }
 
-        $keyArray = array_keys( $this->record );
+        $keyArray = array_keys($this->record);
 
-        return array_search( $name, $keyArray );
+        return array_search($name, $keyArray);
     }
 
     /**
@@ -156,9 +153,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      *
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return (count( $this->record ) == 0);
+        return (count($this->record) == 0);
     }
 
     /**
@@ -168,10 +165,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string|int $name
      * @return boolean
      */
-    public function isNull( $name )
+    public function isNull($name): bool
     {
-        if( $this->contains( $name ) == false )
-        {
+        if ($this->contains($name) == false) {
             return true;
         }
 
@@ -186,10 +182,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      *
      * @param string|int $name
      */
-    public function remove( $name )
+    public function remove($name): void
     {
-        if( $this->contains( $name ) == false )
-        {
+        if ($this->contains($name) == false) {
             return;
         }
 
@@ -202,10 +197,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      *
      * @param string|int $name
      */
-    public function setNull( $name )
+    public function setNull($name): void
     {
-        if( $this->contains( $name ) == false )
-        {
+        if ($this->contains($name) == false) {
             return;
         }
 
@@ -217,14 +211,13 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * record. If <i>$name</i> is out of bounds, a null value is returned.
      *
      * @param string|int $name
-     * @return string
+     * @return string|null
      * @deprecated Use {@link MSqlRecord#getBoolValue}, {@link MSqlRecord#getIntValue}, {@link MSqlRecord#getFloatValue}
      * or {@link MSqlRecord#getStringValue} instead.
      */
-    public function getValue( $name )
+    public function getValue($name):?string
     {
-        if( $this->contains( $name ) == false )
-        {
+        if ($this->contains($name) == false) {
             return null;
         }
 
@@ -238,11 +231,10 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string|int $name
      * @return int|null
      */
-    public function getIntValue( $name )
+    public function getIntValue($name):?int
     {
-        $value = $this->offsetGet( $name );
-        if( is_null( $value ) )
-        {
+        $value = $this->offsetGet($name);
+        if (is_null($value)) {
             return null;
         }
 
@@ -256,11 +248,10 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string|int $name
      * @return float|null
      */
-    public function getFloatValue( $name )
+    public function getFloatValue($name):?float
     {
-        $value = $this->offsetGet( $name );
-        if( is_null( $value ) )
-        {
+        $value = $this->offsetGet($name);
+        if (is_null($value)) {
             return null;
         }
 
@@ -274,11 +265,10 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string|int $name
      * @return bool|null
      */
-    public function getBoolValue( $name )
+    public function getBoolValue($name):?bool
     {
-        $value = $this->offsetGet( $name );
-        if( is_null( $value ) )
-        {
+        $value = $this->offsetGet($name);
+        if (is_null($value)) {
             return null;
         }
 
@@ -292,11 +282,10 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param string|int $name
      * @return null|string
      */
-    public function getStringValue( $name )
+    public function getStringValue($name):?string
     {
-        $value = $this->offsetGet( $name );
-        if( is_null( $value ) )
-        {
+        $value = $this->offsetGet($name);
+        if (is_null($value)) {
             return null;
         }
 
@@ -312,7 +301,7 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      */
     public function current()
     {
-        $keys = array_keys( $this->record );
+        $keys = array_keys($this->record);
         return $keys[$this->at];
     }
 
@@ -337,7 +326,7 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      */
     public function key()
     {
-        $keys = array_keys( $this->record );
+        $keys = array_keys($this->record);
         return $keys[$this->at];
     }
 
@@ -351,7 +340,7 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      */
     public function valid()
     {
-        $fieldCount = count( $this->record );
+        $fieldCount = count($this->record);
         return ($this->at >= 0 && $this->at < $fieldCount);
     }
 
@@ -373,34 +362,27 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param int|string $offset
      * @return bool
      */
-    public function offsetExists( $offset )
+    public function offsetExists($offset)
     {
-        MDataType::mustBe( MDataType::INT | MDataType::STRING );
-
-        if( is_int( $offset ) )
-        {
-            return $this->offsetExists_int( $offset );
+        if (is_int($offset)) {
+            return $this->offsetExists_int($offset);
         }
 
-        return $this->offsetExists_string( $offset );
+        return $this->offsetExists_string($offset);
     }
 
-    private function offsetExists_string( $offset )
+    private function offsetExists_string(string $offset)
     {
-        MDataType::mustBe( MDataType::STRING );
-
-        return array_key_exists( $offset, $this->record );
+        return array_key_exists($offset, $this->record);
     }
 
     /**
      * @param int $offset
      * @return bool
      */
-    private function offsetExists_int( $offset )
+    private function offsetExists_int(int $offset)
     {
-        MDataType::mustBe( MDataType::INT );
-
-        $fieldCount = count( $this->record );
+        $fieldCount = count($this->record);
         return ($offset >= 0 && $offset < $fieldCount);
     }
 
@@ -410,41 +392,32 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param mixed $offset
      * @return mixed|null
      */
-    public function offsetGet( $offset )
+    public function offsetGet($offset)
     {
-        MDataType::mustBe( MDataType::INT | MDataType::STRING );
-
-        if( is_int( $offset ) )
-        {
-            return $this->offsetGet_int( $offset );
+        if (is_int($offset)) {
+            return $this->offsetGet_int($offset);
         }
 
-        return $this->offsetGet_string( $offset );
+        return $this->offsetGet_string($offset);
     }
 
     /**
-     * @param $offset
+     * @param int $offset
      * @return mixed
      */
-    public function offsetGet_int( $offset )
+    public function offsetGet_int(int $offset)
     {
-        MDataType::mustBe( MDataType::INT );
-
-        if( $this->offsetExists_int( $offset ) )
-        {
-            $keys = array_keys( $this->record );
+        if ($this->offsetExists_int($offset)) {
+            $keys = array_keys($this->record);
             return $this->record[$keys[$offset]];
         }
 
         return null;
     }
 
-    public function offsetGet_string( $offset )
+    public function offsetGet_string(string $offset)
     {
-        MDataType::mustBe( MDataType::STRING );
-
-        if( $this->offsetExists_string( $offset ) )
-        {
+        if ($this->offsetExists_string($offset)) {
             return $this->record[$offset];
         }
 
@@ -458,9 +431,9 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param mixed $value
      * @throws MReadOnlyObjectException
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet($offset, $value)
     {
-        throw new MReadOnlyObjectException( __CLASS__, __METHOD__ );
+        throw new MReadOnlyObjectException(__CLASS__, __METHOD__);
     }
 
     /**
@@ -469,8 +442,8 @@ class MSqlRecord implements \ArrayAccess, \Iterator
      * @param mixed $offset
      * @throws MReadOnlyObjectException
      */
-    public function offsetUnset( $offset )
+    public function offsetUnset($offset)
     {
-        throw new MReadOnlyObjectException( __CLASS__, __METHOD__ );
+        throw new MReadOnlyObjectException(__CLASS__, __METHOD__);
     }
 }

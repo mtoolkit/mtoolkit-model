@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model;
 
 /*
@@ -27,62 +28,73 @@ class MTableModel extends MAbstractDataModel
 {
     private $data = array();
 
-    public function __construct( MObject $parent = null )
+    public function __construct(MObject $parent = null)
     {
-        parent::__construct( $parent );
+        parent::__construct($parent);
     }
 
-    public function setDataFromArray( array $data )
+    /**
+     * @param array $data
+     */
+    public function setDataFromArray(array $data): void
     {
         $this->data = $data;
     }
 
+    /**
+     * @return int
+     */
     public function columnCount(): int
     {
-        if( $this->rowCount()<=0 )
-        {
+        if ($this->rowCount() <= 0) {
             return 0;
         }
 
-        return count( $this->data[0] );
+        return count($this->data[0]);
     }
 
+    /**
+     * @param int $row
+     * @param mixed $column
+     * @return mixed
+     */
     public function getData(int $row, $column)
     {
         return $this->data[$row][$column];
     }
 
+    /**
+     * @return int
+     */
     public function rowCount(): int
     {
-        return count( $this->data );
+        return count($this->data);
     }
 
     /**
      * Returns the data for the given <i>$section</i> in the header with the specified <i>$orientation</i>.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
-     * @return null
+     * @return mixed
      */
     public function getHeaderData($section, int $orientation)
     {
         $headerData = null;
 
-        if( count( $this->data )<0 )
-        {
+        if (count($this->data) < 0) {
             return $headerData;
         }
 
 //        echo $section;
 
-        switch( $orientation )
-        {
+        switch ($orientation) {
             case Orientation::HORIZONTAL:
-                $fields = array_keys( $this->data[0] );
+                $fields = array_keys($this->data[0]);
                 $headerData = $fields[$section];
                 break;
             case Orientation::VERTICAL:
-                $fields = array_keys( $this->data );
+                $fields = array_keys($this->data);
                 $headerData = $fields[$section];
                 break;
         }
@@ -93,7 +105,7 @@ class MTableModel extends MAbstractDataModel
     /**
      * Sets the data for the given <i>$section</i> in the header with the specified <i>$orientation</i> to the value supplied.<br />
      * Returns true if the header's data was updated; otherwise returns false.
-     * 
+     *
      * @param int|string $section
      * @param int|Orientation $orientation
      * @param mixed $value
@@ -103,28 +115,25 @@ class MTableModel extends MAbstractDataModel
     {
         $toReturn = false;
 
-        if( count( $this->data )>0 )
-        {
+        if (count($this->data) > 0) {
             return $toReturn;
         }
 
-        switch( $orientation )
-        {
+        switch ($orientation) {
             case Orientation::HORIZONTAL:
-                for( $i = 0; $i<$this->rowCount(); $i++ )
-                {
-                    $fields = array_keys( $this->data[$i] );
-                    $values = array_values( $this->data[$i] );
+                for ($i = 0; $i < $this->rowCount(); $i++) {
+                    $fields = array_keys($this->data[$i]);
+                    $values = array_values($this->data[$i]);
                     $fields[$section] = $value;
-                    $this->data[$i] = array_combine( $fields, $values );
+                    $this->data[$i] = array_combine($fields, $values);
                 }
                 $toReturn = true;
                 break;
             case Orientation::VERTICAL:
-                $fields = array_keys( $this->data );
-                $values = array_values( $this->data );
+                $fields = array_keys($this->data);
+                $values = array_values($this->data);
                 $fields[$section] = $value;
-                $this->data = array_combine( $fields, $values );
+                $this->data = array_combine($fields, $values);
                 $toReturn = true;
                 break;
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace mtoolkit\model\sql;
 
 /*
@@ -23,12 +24,12 @@ namespace mtoolkit\model\sql;
 /**
  * This enum type describes special SQL navigation locations:
  * <ul>
- * <li>BeforeFirstRow	-1	Before the first record.</li>
- * <li>AfterLastRow	-2	After the last record.</li>
+ * <li>BeforeFirstRow    -1    Before the first record.</li>
+ * <li>AfterLastRow    -2    After the last record.</li>
  * </ul>
  */
 final class Location
 {
-    const BeforeFirstRow=-1;
-    const AfterLastRow=-2;
+    public const BeforeFirstRow = -1;
+    public const AfterLastRow = -2;
 }
